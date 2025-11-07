@@ -71,14 +71,14 @@ module.exports = Provider;
 
 //otro proveedor
 
-// const p2 = new Provider({
-//     companyName: "supera",
-//     url_web: "https://www.vivagym.com/es-es/?utm_source=google&utm_medium=paid_search&utm_campaign=251101_es_gads_always-on-rb_brand-extra-presu-b-c1_all&gad_source=1",
-//     address: "Calle Marcelino fernandez",
-//     cif:"J70237882"
+// const p3 = new Provider({
+//     companyName: "Garcia Baquero",
+//     url_web: "https://quesosgarciabaquero.com",
+//     address: "Molinos de la mancha",
+//     cif:"P70237882"
 // });
 
 // // Guardar en la BBDD
-// p2.save()
+// p3.save()
 // .then((data)=>console.log(data))
 // .catch(err=>console.log(err))

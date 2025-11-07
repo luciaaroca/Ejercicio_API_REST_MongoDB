@@ -23,11 +23,11 @@ app.use(express.json());
 
 
 //HABILITAR RUTAS
-    //const booksRoutes = require("./routes/books.routes"); //importamos los datos de books.routes
+const providersRoutes = require("./routes/providers.routes"); 
 
 // API
 // Rutas habilitadas
-   //app.use("/api/books", booksRoutes); // Usar las rutas definidas en books.routes.js
+app.use("/api/providers", providersRoutes);  //http://localhost:3000/api/providers
 
 app.use(error404); //manejo de rutas no encontradas (middleware)
 
