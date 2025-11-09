@@ -63,8 +63,25 @@ const putProduct = async (req, res) => {
   }
 };
 
+//DELETE
+
+const deleteProduct = async (req,res) =>{
+    try{
+        const productDeleted = await productsService.borrarProducto(req.params.id)
+        if(productDeleted){
+            res.status(200).json({message: "Producto eliminado", Producto : productDeleted })
+        }else{
+
+            res.status(404).json({ message: "NO se ha encontrado ningún product con ese ID"});
+        }
+    }catch(error){
+         res.status(500).json({ mensaje: error.message });
+    }
+}
+
 module.exports = {
 getAllproducts,
 postProduct,
-putProduct
+putProduct,
+deleteProduct
 };

@@ -27,10 +27,14 @@ async function saveProduct(
 }
 
 
+
+
+//FUTURO GET
 const obtenerTodosLosProducts = async () => {
     return products = await Product.find().populate("provider"); // populate para traer datos del proveedor
 };
 
+//FUTURO POST
 const createProduct = async (productData) => {
   const { id, title, price, description, providerId} = productData;
 
@@ -56,14 +60,17 @@ const createProduct = async (productData) => {
   return savedProduct.populate('provider');
 };
 
-const updateProduct = async (productId, updateData) => {
+
+//FUTURO PUT
+const updateProduct = async (productId, updateData) => {//funcion que recibe: ID del producto /objeto con los datos que quieres modificar
+
   // Si quieren cambiar el proveedor, verificar que exista
-  if (updateData.providerId) {
-    const provider = await Provider.findById(updateData.providerId);//buscar 
+  if (updateData.providerId) { //verificamos si el usuario envió un providerId
+    const provider = await Provider.findById(updateData.providerId);//buscar en la colección providers un documento cuyo _id coincida con updateData.providerId.
     if (!provider) {
       throw new Error('Proveedor no encontrado');
     }
-    updateData.provider = provider._id; // asignamos el ObjectId
+    updateData.provider = provider._id; //Ahora asignamos el ObjectId real del proveedor al campo provider del producto.
     delete updateData.providerId; // eliminamos providerId para evitar conflicto
   }
 
@@ -72,18 +79,24 @@ const updateProduct = async (productId, updateData) => {
     productId,
     updateData,
     { new: true } // devuelve el documento actualizado
-  ).populate('provider'); // opcional, para devolver los datos del proveedor
+  ).populate('provider'); //para devolver los datos del proveedor
 
   if (!updatedProduct) {
     throw new Error('Producto no encontrado');
   }
 
   return updatedProduct;
-};
+  };
+
+//FUTURO DELETE
+const borrarProducto = async (id)=>{
+ return await Product.findByIdAndDelete(id);
+}
 
 module.exports = {
   saveProduct,
   obtenerTodosLosProducts,
   createProduct,
-  updateProduct
+  updateProduct,
+  borrarProducto
 };
