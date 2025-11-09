@@ -31,59 +31,59 @@ const obtenerTodosLosProducts = async () => {
     return products = await Product.find().populate("provider"); // populate para traer datos del proveedor
 };
 
-// const createProduct = async (datosProduct) => {
-//     const product = new Product(datosProduct); //construimos un nuevo provider con el esquema de models -> incluyendo el parámetro datosProvider introducido por el usuario
-//     return await product.save(); //guarda nuevo provider en la BBDD
-// }
+const createProduct = async (productData) => {
+  const { id, title, price, description, providerId} = productData;
 
-// const createProduct = async (id, title, price, description, companyName) => {
-//   // Buscar proveedor por nombre
-//   const provider = await Provider.findOne({ companyName });
-//   if (!provider) throw new Error("Proveedor no encontrado");
+  // 1. Buscar proveedor
+  const provider = await Provider.findById(providerId);
+  if (!provider) {
+    throw new Error('Proveedor no encontrado');
+  }
 
-//   // Crear producto con ObjectId del proveedor
-//   const product = new Product({
-//     id,
-//     title,
-//     price,
-//     description,
-//     provider: provider._id
-//   });
+  // 2. Crear producto
+  const newProduct = new Product({
+    id,
+    title,
+    price,
+    description,
+    provider: provider._id
+  });
 
-//   //Guardar producto
-//   const result = await product.save();
-//   return result; // devolvemos el documento completo guardado
-// };
+  // 3. Guardar
+  const savedProduct = await newProduct.save();
 
-const updateProduct = async (id,datosEditarProduct)=>{
-    return await Product.findOneAndUpdate(  { id: id },datosEditarProduct, { new: true }); //Método de Mongoose que busca un documento por su ID y lo actualiza .findByIdAndUpdate()
-}
+  // 4. Devolver producto con proveedor incluido (opcional)
+  return savedProduct.populate('provider');
+};
 
-// //lógica para que si eliminamos un proveedor -> en productos- provider :null
-// const eliminarProvider = async (providerId) => {
-//     const proveedor = await Provider.findById(providerId); //buscamos el parámetro id introducido por el usuario en providers
-//     if (!proveedor) {
-//          throw new Error("Proveedor no encontrado");
-//       }
-//         const resultadoUpdate = await Product.updateMany( //actualizar products.provider:null al borrarse un provider
-//         { provider: providerId }, //si coincide con el id que pasa el usuario
-//         { $set: { provider: null } }
-//     );
-//     //eliminamos proveedor
-//     const proveedorEliminado = await Provider.findByIdAndDelete(providerId);
+const updateProduct = async (productId, updateData) => {
+  // Si quieren cambiar el proveedor, verificar que exista
+  if (updateData.providerId) {
+    const provider = await Provider.findById(updateData.providerId);//buscar 
+    if (!provider) {
+      throw new Error('Proveedor no encontrado');
+    }
+    updateData.provider = provider._id; // asignamos el ObjectId
+    delete updateData.providerId; // eliminamos providerId para evitar conflicto
+  }
 
-    
-//     return {
-//         proveedorEliminado,
-//         productosDesvinculados: resultadoUpdate.modifiedCount
-//     };
-// };
+  // Buscar y actualizar el producto
+  const updatedProduct = await Product.findByIdAndUpdate(
+    productId,
+    updateData,
+    { new: true } // devuelve el documento actualizado
+  ).populate('provider'); // opcional, para devolver los datos del proveedor
 
+  if (!updatedProduct) {
+    throw new Error('Producto no encontrado');
+  }
 
+  return updatedProduct;
+};
 
 module.exports = {
   saveProduct,
   obtenerTodosLosProducts,
-  //createProduct
-   updateProduct
+  createProduct,
+  updateProduct
 };
