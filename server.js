@@ -24,10 +24,12 @@ app.use(express.json());
 
 //HABILITAR RUTAS
 const providersRoutes = require("./routes/providers.routes"); 
+const productsRoutes = require("./routes/products.routes"); 
 
 // API
 // Rutas habilitadas
 app.use("/api/providers", providersRoutes);  //http://localhost:3000/api/providers
+app.use("/api/products", productsRoutes );  //http://localhost:3000/api/products
 
 app.use(error404); //manejo de rutas no encontradas (middleware)
 
@@ -39,3 +41,5 @@ app.listen(port, () => {
     })
   );
 })
+
+module.exports = app;
