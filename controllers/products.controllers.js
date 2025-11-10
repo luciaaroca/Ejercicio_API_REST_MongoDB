@@ -2,6 +2,7 @@ const productsService = require('../services/products.service');
 
 //GET -> todos los products LEER
 //http://localhost:3000/api/products
+//
 const getAllproducts = async (req, res) => {
     try {
         const products = await productsService.obtenerTodosLosProducts();
