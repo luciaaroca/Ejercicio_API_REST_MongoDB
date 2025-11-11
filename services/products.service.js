@@ -41,7 +41,7 @@ const createProduct = async (productData) => {
   // 1. Buscar proveedor
   const provider = await Provider.findById(providerId);
   if (!provider) {
-    throw new Error('Proveedor no encontrado');
+    throw new Error('No se pudo crear el product');
   }
 
   // 2. Crear producto
